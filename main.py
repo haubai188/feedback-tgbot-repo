@@ -1,3 +1,6 @@
+import telegram
+from telegram.ext import CommandHandler, MessageHandler, Filters
+
 # Replace YOUR_BOT_TOKEN with your actual bot token
 bot = telegram.Bot(token='YOUR_BOT_TOKEN')
 
