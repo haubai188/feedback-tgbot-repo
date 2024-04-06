@@ -1,5 +1,5 @@
 import telegram
-from telegram.ext import CommandHandler, MessageHandler, Filters
+from telegram.ext import CommandHandler, MessageHandler, Filters, Updater
 
 # Replace YOUR_BOT_TOKEN with your actual bot token
 bot = telegram.Bot(token='YOUR_BOT_TOKEN')
@@ -29,15 +29,21 @@ def specify_user(update, context):
         context.bot.send_message(chat_id=update.effective_chat.id, text='Please specify a valid user ID.')
 
 # Set up the message and command handlers
-message_handler = MessageHandler(Filters.text &amp; ~Filters.command, collect_feedback)
-start_handler = CommandHandler('start', start_feedback)
-user_handler = CommandHandler('user', specify_user)
+def main():
+    updater = Updater(token='YOUR_BOT_TOKEN', use_context=True)
+    dispatcher = updater.dispatcher
 
-# Add the handlers to the bot
-updater = telegram.ext.Updater(token='YOUR_BOT_TOKEN', use_context=True)
-updater.dispatcher.add_handler(message_handler)
-updater.dispatcher.add_handler(start_handler)
-updater.dispatcher.add_handler(user_handler)
+    message_handler = MessageHandler(Filters.text & ~Filters.command, collect_feedback)
+    start_handler = CommandHandler('start', start_feedback)
+    user_handler = CommandHandler('user', specify_user)
 
-# Start the bot
-updater.start_polling()
+    dispatcher.add_handler(message_handler)
+    dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(user_handler)
+
+    # Start the bot
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
